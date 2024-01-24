@@ -1,0 +1,206 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/constants/uidata.dart';
+
+class CategoryList extends StatefulWidget {
+  const CategoryList({Key? key}) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CategoryListState createState() => _CategoryListState();
+}
+
+class _CategoryListState extends State<CategoryList> {
+  int startCategoryIndex = 0;
+  String selectedFoodCategory = dishCategories.first;
+
+  void _changeCategory(bool isIncrement) {
+    setState(() {
+      if (isIncrement) {
+        startCategoryIndex = (startCategoryIndex + 1) % dishCategories.length;
+      } else {
+        startCategoryIndex = (startCategoryIndex - 1 + dishCategories.length) %
+            dishCategories.length;
+      }
+      selectedFoodCategory = dishCategories[startCategoryIndex];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Map<String, String>> filteredCategories = dishes
+        .where((category) => category['foodCategory'] == selectedFoodCategory)
+        .toList();
+    Widget buildCategoryContainer(int index) {
+      return Container(
+        height: 240.0.h,
+        width: 162.5.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.r),
+          color: kGray2,
+        ),
+        child: Column(
+          children: [
+            const Padding(padding: EdgeInsets.only(top: 10.0)),
+            ClipOval(
+              child: Image.network(
+                filteredCategories[index]['imageUrl']!,
+                alignment: Alignment.topCenter,
+                height: 110.0.h,
+                width: 100.0.w,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(top: 10.0)),
+            Text(
+              filteredCategories[index]['title']!,
+              style: const TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(top: 10.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                index.isEven ? 4 : 5,
+                (index) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                  size: 20.0,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  Column(
+                    children: [
+                      Text(
+                        '30',
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: kGray3,
+                        ),
+                      ),
+                      Text(
+                        'min',
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: kGray3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  Text(
+                    '|',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: kGray3,
+                    ),
+                  ),
+                  Spacer(),
+                  Column(
+                    children: [
+                      Text(
+                        'Easy',
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: kGray3,
+                        ),
+                      ),
+                      Text(
+                        'Lvl',
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: kGray3,
+                        ),
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0, left: 45.0, right: 45.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(
+                  AntDesign.leftcircleo,
+                  color: kWhite,
+                ),
+                onPressed: () {
+                  _changeCategory(false);
+                },
+              ),
+              Center(
+                child: Text(
+                  dishCategories[startCategoryIndex],
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w500,
+                    color: kWhite,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(
+                  AntDesign.rightcircleo,
+                  color: kWhite,
+                ),
+                onPressed: () {
+                  _changeCategory(true);
+                },
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: height,
+          width: width,
+          padding: const EdgeInsets.only(top: 15.0, left: 30.0, right: 30.0),
+          child: ListView(
+            padding: const EdgeInsets.only(bottom: 440.0),
+            scrollDirection: Axis.vertical,
+            children: List.generate(filteredCategories.length, (i) {
+              if (i.isEven) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 15.0,
+                  ),
+                  child: Row(
+                    children: [
+                      buildCategoryContainer(i),
+                      const Spacer(),
+                      buildCategoryContainer(i + 1),
+                    ],
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+}
