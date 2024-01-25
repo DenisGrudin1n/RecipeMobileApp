@@ -33,9 +33,18 @@ class _CategoryListState extends State<CategoryList> {
     List<Map<String, String>> filteredCategories = dishes
         .where((category) => category['foodCategory'] == selectedFoodCategory)
         .toList();
+
     Widget buildCategoryContainer(int index) {
+      final splittedTitle = filteredCategories[index]['title']?.split(' ');
+      final firstTitlePart = (splittedTitle!.length > 1)
+          ? splittedTitle.take((splittedTitle.length + 1) ~/ 2).join(' ')
+          : '';
+      final secondTitlePart = (splittedTitle.length > 1)
+          ? splittedTitle.skip((splittedTitle.length + 1) ~/ 2).join(' ')
+          : '';
+
       return Container(
-        height: 240.0.h,
+        height: 250.0.h,
         width: 162.5.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
@@ -54,42 +63,66 @@ class _CategoryListState extends State<CategoryList> {
               ),
             ),
             const Padding(padding: EdgeInsets.only(top: 10.0)),
-            Text(
-              filteredCategories[index]['title']!,
-              style: const TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+              child: (filteredCategories[index]['title']!.length > 25)
+                  ? Column(
+                      children: [
+                        for (var titlePart in [firstTitlePart, secondTitlePart])
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              titlePart,
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                      ],
+                    )
+                  : FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        filteredCategories[index]['title']!,
+                        style: const TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
             ),
             const Padding(padding: EdgeInsets.only(top: 10.0)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                index.isEven ? 4 : 5,
-                (index) => const Icon(
+                int.parse(filteredCategories[index]['stars']!),
+                (starIndex) => const Icon(
                   Icons.star,
                   color: Colors.amber,
                   size: 20.0,
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   Column(
                     children: [
                       Text(
-                        '30',
-                        style: TextStyle(
+                        filteredCategories[index]['cookTime']!,
+                        style: const TextStyle(
                           fontSize: 11.0,
                           color: kGray3,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'min',
                         style: TextStyle(
                           fontSize: 11.0,
@@ -98,25 +131,25 @@ class _CategoryListState extends State<CategoryList> {
                       ),
                     ],
                   ),
-                  Spacer(),
-                  Text(
+                  const Spacer(),
+                  const Text(
                     '|',
                     style: TextStyle(
                       fontSize: 20.0,
                       color: kGray3,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Column(
                     children: [
                       Text(
-                        'Easy',
-                        style: TextStyle(
+                        filteredCategories[index]['level']!,
+                        style: const TextStyle(
                           fontSize: 11.0,
                           color: kGray3,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Lvl',
                         style: TextStyle(
                           fontSize: 11.0,
@@ -125,7 +158,7 @@ class _CategoryListState extends State<CategoryList> {
                       )
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             ),
