@@ -37,15 +37,15 @@ class _CategoryListState extends State<CategoryList> {
     Widget buildCategoryContainer(int index) {
       final splittedTitle = filteredCategories[index]['title']?.split(' ');
       final firstTitlePart = (splittedTitle!.length > 1)
-          ? splittedTitle.take((splittedTitle.length + 1) ~/ 2).join(' ')
+          ? splittedTitle.take((splittedTitle.length) ~/ 2).join(' ')
           : '';
       final secondTitlePart = (splittedTitle.length > 1)
-          ? splittedTitle.skip((splittedTitle.length + 1) ~/ 2).join(' ')
+          ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
           : '';
 
       return Container(
         height: 250.0.h,
-        width: 162.5.h,
+        width: 165.0.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
           color: kGray2,
@@ -222,8 +222,9 @@ class _CategoryListState extends State<CategoryList> {
                   child: Row(
                     children: [
                       buildCategoryContainer(i),
-                      const Spacer(),
-                      buildCategoryContainer(i + 1),
+                      if (i + 1 < filteredCategories.length) const Spacer(),
+                      if (i + 1 < filteredCategories.length)
+                        buildCategoryContainer(i + 1),
                     ],
                   ),
                 );
