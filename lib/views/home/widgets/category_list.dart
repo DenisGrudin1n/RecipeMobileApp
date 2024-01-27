@@ -15,6 +15,7 @@ class CategoryList extends StatefulWidget {
 class _CategoryListState extends State<CategoryList> {
   int startCategoryIndex = 0;
   String selectedFoodCategory = dishCategories.first;
+  Map<String, List<bool>> isFavoriteMap = {};
 
   void _changeCategory(bool isIncrement) {
     setState(() {
@@ -42,9 +43,13 @@ class _CategoryListState extends State<CategoryList> {
       final secondTitlePart = (splittedTitle.length > 1)
           ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
           : '';
+      final key = filteredCategories[index]['title'] ?? index.toString();
+      if (!isFavoriteMap.containsKey(key)) {
+        isFavoriteMap[key] = List.filled(filteredCategories.length, false);
+      }
 
       return Container(
-        height: 250.0.h,
+        height: 280.0.h,
         width: 165.0.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
@@ -52,7 +57,26 @@ class _CategoryListState extends State<CategoryList> {
         ),
         child: Column(
           children: [
-            const Padding(padding: EdgeInsets.only(top: 10.0)),
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0, top: 10.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      isFavoriteMap[key]![index] = !isFavoriteMap[key]![index];
+                    });
+                  },
+                  child: Icon(
+                    isFavoriteMap[key]![index]
+                        ? Icons.favorite
+                        : Icons.favorite_outline,
+                    color: Colors.red,
+                    size: 24.0,
+                  ),
+                ),
+              ),
+            ),
             ClipOval(
               child: Image.network(
                 filteredCategories[index]['imageUrl']!,
