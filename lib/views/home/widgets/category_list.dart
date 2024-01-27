@@ -8,7 +8,6 @@ class CategoryList extends StatefulWidget {
   const CategoryList({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _CategoryListState createState() => _CategoryListState();
 }
 
@@ -19,12 +18,10 @@ class _CategoryListState extends State<CategoryList> {
 
   void _changeCategory(bool isIncrement) {
     setState(() {
-      if (isIncrement) {
-        startCategoryIndex = (startCategoryIndex + 1) % dishCategories.length;
-      } else {
-        startCategoryIndex = (startCategoryIndex - 1 + dishCategories.length) %
-            dishCategories.length;
-      }
+      startCategoryIndex = (startCategoryIndex +
+              (isIncrement ? 1 : -1) +
+              dishCategories.length) %
+          dishCategories.length;
       selectedFoodCategory = dishCategories[startCategoryIndex];
     });
   }
@@ -36,23 +33,23 @@ class _CategoryListState extends State<CategoryList> {
         .toList();
 
     Widget buildCategoryContainer(int index) {
-      final splittedTitle = filteredCategories[index]['title']?.split(' ');
-      final firstTitlePart = (splittedTitle!.length > 1)
+      final title = filteredCategories[index]['title']!;
+      final splittedTitle = title.split(' ');
+      final firstTitlePart = (splittedTitle.length > 1)
           ? splittedTitle.take((splittedTitle.length) ~/ 2).join(' ')
           : '';
       final secondTitlePart = (splittedTitle.length > 1)
           ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
           : '';
-      final key = filteredCategories[index]['title'] ?? index.toString();
-      if (!isFavoriteMap.containsKey(key)) {
-        isFavoriteMap[key] = List.filled(filteredCategories.length, false);
-      }
+      final key = title;
+      isFavoriteMap.putIfAbsent(
+          key, () => List.filled(filteredCategories.length, false));
 
       return Container(
         height: 280.0.h,
         width: 165.0.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.r),
+          borderRadius: BorderRadius.circular(30.0.r),
           color: kGray2,
         ),
         child: Column(
@@ -89,7 +86,7 @@ class _CategoryListState extends State<CategoryList> {
             const Padding(padding: EdgeInsets.only(top: 10.0)),
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: (filteredCategories[index]['title']!.length > 25)
+              child: (title.length > 20)
                   ? Column(
                       children: [
                         for (var titlePart in [firstTitlePart, secondTitlePart])
@@ -109,7 +106,7 @@ class _CategoryListState extends State<CategoryList> {
                   : FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        filteredCategories[index]['title']!,
+                        title,
                         style: const TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.w500,
