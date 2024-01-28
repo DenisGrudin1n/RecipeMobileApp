@@ -36,6 +36,11 @@ class _CategoryListState extends State<CategoryList> {
 
     Widget buildCategoryContainer(int index) {
       final title = filteredCategories[index]['title']!;
+      final imageUrl = filteredCategories[index]['imageUrl']!;
+      final stars = filteredCategories[index]['stars']!;
+      final cookTime = filteredCategories[index]['cookTime']!;
+      final level = filteredCategories[index]['level']!;
+
       final splittedTitle = title.split(' ');
       final firstTitlePart = (splittedTitle.length > 1)
           ? splittedTitle.take((splittedTitle.length) ~/ 2).join(' ')
@@ -44,6 +49,7 @@ class _CategoryListState extends State<CategoryList> {
           ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
           : '';
       final key = title;
+
       isFavoriteMap.putIfAbsent(
           key, () => List.filled(filteredCategories.length, false));
 
@@ -68,13 +74,23 @@ class _CategoryListState extends State<CategoryList> {
                         // Додаємо рецепт до улюблених
                         FavoriteController favoriteController = Get.find();
                         favoriteController.addToFavorites(
-                          FavoriteRecipe(title: title),
+                          FavoriteRecipe(
+                              title: title,
+                              imageUrl: imageUrl,
+                              stars: stars,
+                              cookTime: cookTime,
+                              level: level),
                         );
                       } else {
                         // Видаляємо рецепт з улюблених
                         FavoriteController favoriteController = Get.find();
                         favoriteController.removeFromFavorites(
-                          FavoriteRecipe(title: title),
+                          FavoriteRecipe(
+                              title: title,
+                              imageUrl: imageUrl,
+                              stars: stars,
+                              cookTime: cookTime,
+                              level: level),
                         );
                       }
                     });
@@ -91,7 +107,7 @@ class _CategoryListState extends State<CategoryList> {
             ),
             ClipOval(
               child: Image.network(
-                filteredCategories[index]['imageUrl']!,
+                imageUrl,
                 alignment: Alignment.topCenter,
                 height: 110.0.h,
                 width: 100.0.w,
@@ -134,7 +150,7 @@ class _CategoryListState extends State<CategoryList> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                int.parse(filteredCategories[index]['stars']!),
+                int.parse(stars),
                 (starIndex) => const Icon(
                   Icons.star,
                   color: Colors.amber,
@@ -152,7 +168,7 @@ class _CategoryListState extends State<CategoryList> {
                   Column(
                     children: [
                       Text(
-                        filteredCategories[index]['cookTime']!,
+                        cookTime,
                         style: const TextStyle(
                           fontSize: 11.0,
                           color: kGray3,
@@ -179,7 +195,7 @@ class _CategoryListState extends State<CategoryList> {
                   Column(
                     children: [
                       Text(
-                        filteredCategories[index]['level']!,
+                        level,
                         style: const TextStyle(
                           fontSize: 11.0,
                           color: kGray3,

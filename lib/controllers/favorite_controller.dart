@@ -18,6 +18,16 @@ class FavoriteController extends GetxController {
 
 class FavoriteRecipe {
   final String title;
+  final String imageUrl;
+  final String stars;
+  final String cookTime;
+  final String level;
 
-  FavoriteRecipe({required this.title});
+  FavoriteRecipe({
+    required this.title,
+    required this.imageUrl,
+    required this.stars,
+    required this.cookTime,
+    required this.level,
+  });
 }
