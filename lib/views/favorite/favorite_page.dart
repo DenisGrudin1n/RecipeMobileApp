@@ -34,36 +34,48 @@ class FavoritePage extends StatelessWidget {
     return GetX<FavoriteController>(
       builder: (favoriteController) {
         List<FavoriteRecipe> recipes = favoriteController.favoriteRecipes;
-
-        return ListView.builder(
-          itemCount: recipes.length,
-          itemBuilder: (context, index) {
-            if (index.isEven) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 15.0,
-                  left: 30.0,
-                  right: 30.0,
-                ),
-                child: Row(
-                  children: [
-                    buildFavoriteRecipeContainer(recipes[index]),
-                    if (index + 1 < recipes.length) const Spacer(),
-                    if (index + 1 < recipes.length)
-                      buildFavoriteRecipeContainer(recipes[index + 1]),
-                  ],
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        );
+        if (recipes.isEmpty) {
+          return const Center(
+            child: Text(
+              'No Favorite Recipes Added Yet',
+              style: TextStyle(
+                  color: kWhite, fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          );
+        } else {
+          return ListView.builder(
+            itemCount: recipes.length,
+            itemBuilder: (context, index) {
+              if (index.isEven) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 15.0,
+                    left: 30.0,
+                    right: 30.0,
+                  ),
+                  child: Row(
+                    children: [
+                      buildFavoriteRecipeContainer(
+                          recipes[index], favoriteController),
+                      if (index + 1 < recipes.length) const Spacer(),
+                      if (index + 1 < recipes.length)
+                        buildFavoriteRecipeContainer(
+                            recipes[index + 1], favoriteController),
+                    ],
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          );
+        }
       },
     );
   }
 
-  Widget buildFavoriteRecipeContainer(FavoriteRecipe recipe) {
+  Widget buildFavoriteRecipeContainer(
+      FavoriteRecipe recipe, FavoriteController favoriteController) {
     final title = recipe.title;
     final imageUrl = recipe.imageUrl;
     final stars = recipe.stars;
@@ -94,6 +106,7 @@ class FavoritePage extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   // Обробник події для зміни стану залайкано/не залайкано
+                  favoriteController.removeFromFavorites(recipe);
                 },
                 child: const Icon(
                   Icons

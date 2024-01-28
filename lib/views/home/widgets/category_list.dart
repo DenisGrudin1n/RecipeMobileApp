@@ -18,6 +18,15 @@ class _CategoryListState extends State<CategoryList> {
   String selectedFoodCategory = dishCategories.first;
   Map<String, List<bool>> isFavoriteMap = {};
 
+  late FavoriteController
+      favoriteController; // Додано контролер улюблених рецептів
+
+  @override
+  void initState() {
+    super.initState();
+    favoriteController = Get.find(); // Ініціалізація контролера
+  }
+
   void _changeCategory(bool isIncrement) {
     setState(() {
       startCategoryIndex = (startCategoryIndex +
@@ -71,8 +80,6 @@ class _CategoryListState extends State<CategoryList> {
                     setState(() {
                       isFavoriteMap[key]![index] = !isFavoriteMap[key]![index];
                       if (isFavoriteMap[key]![index]) {
-                        // Додаємо рецепт до улюблених
-                        FavoriteController favoriteController = Get.find();
                         favoriteController.addToFavorites(
                           FavoriteRecipe(
                               title: title,
@@ -82,8 +89,6 @@ class _CategoryListState extends State<CategoryList> {
                               level: level),
                         );
                       } else {
-                        // Видаляємо рецепт з улюблених
-                        FavoriteController favoriteController = Get.find();
                         favoriteController.removeFromFavorites(
                           FavoriteRecipe(
                               title: title,
