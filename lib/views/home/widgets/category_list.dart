@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/constants/uidata.dart';
+import 'package:recipeapp/controllers/favorite_controller.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({Key? key}) : super(key: key);
@@ -62,6 +64,19 @@ class _CategoryListState extends State<CategoryList> {
                   onTap: () {
                     setState(() {
                       isFavoriteMap[key]![index] = !isFavoriteMap[key]![index];
+                      if (isFavoriteMap[key]![index]) {
+                        // Додаємо рецепт до улюблених
+                        FavoriteController favoriteController = Get.find();
+                        favoriteController.addToFavorites(
+                          FavoriteRecipe(title: title),
+                        );
+                      } else {
+                        // Видаляємо рецепт з улюблених
+                        FavoriteController favoriteController = Get.find();
+                        favoriteController.removeFromFavorites(
+                          FavoriteRecipe(title: title),
+                        );
+                      }
                     });
                   },
                   child: Icon(

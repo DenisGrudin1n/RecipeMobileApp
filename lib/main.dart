@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/controllers/favorite_controller.dart';
 import 'package:recipeapp/views/entrypoint.dart';
 
-Widget defaultHome = const MainScreen();
+Widget defaultHome = MainScreen();
 
 void main() {
+  Get.put(FavoriteController());
   runApp(const MyApp());
 }
 

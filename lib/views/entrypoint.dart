@@ -10,9 +10,9 @@ import 'package:recipeapp/views/home/home_page.dart';
 import 'package:recipeapp/views/settings/settings_page.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  MainScreen({super.key});
 
-  final List<Widget> pageList = const [
+  final List<Widget> pageList = [
     HomePage(),
     FavoritePage(),
     AddPage(),
