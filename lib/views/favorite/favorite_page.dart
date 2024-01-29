@@ -1,11 +1,30 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/constants/uidata.dart';
 import 'package:recipeapp/controllers/favorite_controller.dart';
 
-class FavoritePage extends StatelessWidget {
+class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
+
+  @override
+  _FavoritePageState createState() => _FavoritePageState();
+}
+
+class _FavoritePageState extends State<FavoritePage> {
+  late FavoriteController favoriteController;
+  int startCategoryIndex = 0;
+  String selectedFoodCategory = dishCategories.first;
+  Map<String, List<bool>> isFavoriteMap = {};
+  Timer? _removeFavoritesTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    favoriteController = Get.find();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +43,7 @@ class FavoritePage extends StatelessWidget {
             width: width,
             color: kPrimary,
           ),
-          _buildFavoriteRecipesList(), // Вставлення списку улюблених рецептів
+          _buildFavoriteRecipesList(),
         ],
       ),
     );
@@ -55,12 +74,10 @@ class FavoritePage extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      buildFavoriteRecipeContainer(
-                          recipes[index], favoriteController),
+                      buildFavoriteRecipeContainer(recipes[index], index),
                       if (index + 1 < recipes.length) const Spacer(),
                       if (index + 1 < recipes.length)
-                        buildFavoriteRecipeContainer(
-                            recipes[index + 1], favoriteController),
+                        buildFavoriteRecipeContainer(recipes[index + 1], index),
                     ],
                   ),
                 );
@@ -74,11 +91,13 @@ class FavoritePage extends StatelessWidget {
     );
   }
 
-  Widget buildFavoriteRecipeContainer(
-      FavoriteRecipe recipe, FavoriteController favoriteController) {
+  Widget buildFavoriteRecipeContainer(FavoriteRecipe recipe, int index) {
+    List<Map<String, String>> filteredCategories = dishes
+        .where((category) => category['foodCategory'] == selectedFoodCategory)
+        .toList();
     final title = recipe.title;
     final imageUrl = recipe.imageUrl;
-    final stars = recipe.stars;
+    final stars = int.parse(recipe.stars);
     final cookTime = recipe.cookTime;
     final level = recipe.level;
 
@@ -89,6 +108,9 @@ class FavoritePage extends StatelessWidget {
     final secondTitlePart = (splittedTitle.length > 1)
         ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
         : '';
+
+    isFavoriteMap.putIfAbsent(
+        title, () => List.filled(filteredCategories.length, true));
 
     return Container(
       height: 280.0.h,
@@ -105,12 +127,30 @@ class FavoritePage extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: InkWell(
                 onTap: () {
-                  // Обробник події для зміни стану залайкано/не залайкано
-                  favoriteController.removeFromFavorites(recipe);
+                  setState(() {
+                    isFavoriteMap[title]![index] =
+                        !isFavoriteMap[title]![index];
+                    final recipe = FavoriteRecipe(
+                      title: title,
+                      imageUrl: imageUrl,
+                      stars: stars.toString(),
+                      cookTime: filteredCategories[index]['cookTime']!,
+                      level: filteredCategories[index]['level']!,
+                    );
+
+                    if (isFavoriteMap[title]![index]) {
+                      _cancelDelayedRemoveFromFavorites();
+                    } else {
+                      favoriteController.removeFromFavorites(recipe);
+                    }
+                  });
+                  _delayedRemoveFromFavorites(
+                      recipe, !isFavoriteMap[title]![index]);
                 },
-                child: const Icon(
-                  Icons
-                      .favorite, // або Icons.favorite_outline, залежно від стану
+                child: Icon(
+                  isFavoriteMap[title]![index]
+                      ? Icons.favorite
+                      : Icons.favorite_outline,
                   color: Colors.red,
                   size: 24.0,
                 ),
@@ -162,7 +202,7 @@ class FavoritePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
-              int.parse(stars),
+              stars,
               (starIndex) => const Icon(
                 Icons.star,
                 color: Colors.amber,
@@ -228,5 +268,18 @@ class FavoritePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _cancelDelayedRemoveFromFavorites() {
+    _removeFavoritesTimer?.cancel();
+  }
+
+  void _delayedRemoveFromFavorites(FavoriteRecipe recipe, bool wasFavorite) {
+    const Duration delay = Duration(seconds: 1);
+    _removeFavoritesTimer = Timer(delay, () {
+      if (wasFavorite && favoriteController.isFavorite(recipe)) {
+        favoriteController.removeFromFavorites(recipe);
+      }
+    });
   }
 }

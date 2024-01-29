@@ -3,18 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recipeapp/constants/constants.dart';
 
 class DailyMealBlock extends StatelessWidget {
-  const DailyMealBlock({
-    super.key,
-  });
+  const DailyMealBlock({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: Container(
         height: 170.0.h,
         width: width,
-        padding: const EdgeInsets.only(left: 15.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
           color: kWhite,
@@ -25,19 +22,19 @@ class DailyMealBlock extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 5.0),
+          padding: const EdgeInsets.only(left: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(padding: EdgeInsets.only(top: 20.0)),
+              const SizedBox(height: 20.0),
               _buildText('Meal Of The Day', kWhite, 11, FontWeight.w500),
-              const Padding(padding: EdgeInsets.only(top: 25.0)),
+              const SizedBox(height: 25.0),
               _buildText('Salmon Dish', kYellow, 16, FontWeight.w500),
-              const Padding(padding: EdgeInsets.only(top: 10.0)),
+              const SizedBox(height: 10.0),
               Row(
                 children: [
                   _buildIconText(Icons.timelapse, '15 min', kDark),
-                  const Padding(padding: EdgeInsets.only(left: 15.0)),
+                  const SizedBox(width: 15.0),
                   _buildIconText(Icons.verified_outlined, 'easy lvl', kDark),
                 ],
               )
@@ -76,7 +73,7 @@ class DailyMealBlock extends StatelessWidget {
             size: 18.0,
           ),
         ),
-        const Padding(padding: EdgeInsets.only(top: 3.0)),
+        const SizedBox(height: 3.0),
         _buildText(text, kYellow, 10.0, FontWeight.w500),
       ],
     );

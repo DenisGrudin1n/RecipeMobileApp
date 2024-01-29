@@ -61,6 +61,8 @@ dependencies:
   firebase_core: ^2.24.2
   country_picker: ^2.0.23
   badges: ^3.1.2
+  json_annotation: ^4.8.1
+  shared_preferences: ^2.2.2
 
 
 dev_dependencies:

@@ -14,6 +14,14 @@ class FavoriteController extends GetxController {
   bool isFavorite(FavoriteRecipe recipe) {
     return favoriteRecipes.contains(recipe);
   }
+
+  void toggleFavorite(FavoriteRecipe recipe) {
+    if (isFavorite(recipe)) {
+      removeFromFavorites(recipe);
+    } else {
+      addToFavorites(recipe);
+    }
+  }
 }
 
 class FavoriteRecipe {
