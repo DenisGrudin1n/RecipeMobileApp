@@ -63,6 +63,8 @@ class _FavoritePageState extends State<FavoritePage> {
           );
         } else {
           return ListView.builder(
+            padding: const EdgeInsets.only(bottom: 80.0, top: 15),
+            scrollDirection: Axis.vertical,
             itemCount: recipes.length,
             itemBuilder: (context, index) {
               if (index.isEven) {
@@ -74,10 +76,12 @@ class _FavoritePageState extends State<FavoritePage> {
                   ),
                   child: Row(
                     children: [
-                      buildFavoriteRecipeContainer(recipes[index], index),
+                      buildFavoriteRecipeContainer(recipes[index],
+                          recipeIndex: index),
                       if (index + 1 < recipes.length) const Spacer(),
                       if (index + 1 < recipes.length)
-                        buildFavoriteRecipeContainer(recipes[index + 1], index),
+                        buildFavoriteRecipeContainer(recipes[index + 1],
+                            recipeIndex: index),
                     ],
                   ),
                 );
@@ -91,7 +95,8 @@ class _FavoritePageState extends State<FavoritePage> {
     );
   }
 
-  Widget buildFavoriteRecipeContainer(FavoriteRecipe recipe, int index) {
+  Widget buildFavoriteRecipeContainer(FavoriteRecipe recipe,
+      {required int recipeIndex}) {
     List<Map<String, String>> filteredCategories = dishes
         .where((category) => category['foodCategory'] == selectedFoodCategory)
         .toList();
@@ -100,6 +105,7 @@ class _FavoritePageState extends State<FavoritePage> {
     final stars = int.parse(recipe.stars);
     final cookTime = recipe.cookTime;
     final level = recipe.level;
+    final foodCategory = recipe.foodCategory;
 
     final splittedTitle = title.split(' ');
     final firstTitlePart = (splittedTitle.length > 1)
@@ -128,27 +134,29 @@ class _FavoritePageState extends State<FavoritePage> {
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    isFavoriteMap[title]![index] =
-                        !isFavoriteMap[title]![index];
+                    isFavoriteMap[title]![recipeIndex] =
+                        !isFavoriteMap[title]![recipeIndex];
+
                     final recipe = FavoriteRecipe(
                       title: title,
                       imageUrl: imageUrl,
                       stars: stars.toString(),
-                      cookTime: filteredCategories[index]['cookTime']!,
-                      level: filteredCategories[index]['level']!,
+                      cookTime: cookTime,
+                      level: level,
+                      foodCategory: foodCategory,
                     );
 
-                    if (isFavoriteMap[title]![index]) {
+                    if (isFavoriteMap[title]![recipeIndex]) {
                       _cancelDelayedRemoveFromFavorites();
                     } else {
                       favoriteController.removeFromFavorites(recipe);
                     }
                   });
                   _delayedRemoveFromFavorites(
-                      recipe, !isFavoriteMap[title]![index]);
+                      recipe, !isFavoriteMap[title]![recipeIndex]);
                 },
                 child: Icon(
-                  isFavoriteMap[title]![index]
+                  isFavoriteMap[title]![recipeIndex]
                       ? Icons.favorite
                       : Icons.favorite_outline,
                   color: Colors.red,

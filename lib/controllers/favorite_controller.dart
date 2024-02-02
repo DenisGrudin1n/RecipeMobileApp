@@ -30,6 +30,7 @@ class FavoriteRecipe {
   final String stars;
   final String cookTime;
   final String level;
+  final String foodCategory;
 
   FavoriteRecipe({
     required this.title,
@@ -37,5 +38,6 @@ class FavoriteRecipe {
     required this.stars,
     required this.cookTime,
     required this.level,
+    required this.foodCategory,
   });
 }

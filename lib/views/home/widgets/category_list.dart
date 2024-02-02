@@ -83,6 +83,7 @@ class _CategoryListState extends State<CategoryList> {
                       stars: stars.toString(),
                       cookTime: category['cookTime']!,
                       level: category['level']!,
+                      foodCategory: category['foodCategory']!,
                     );
 
                     isFavorite
