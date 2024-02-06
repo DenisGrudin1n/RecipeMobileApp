@@ -119,7 +119,7 @@ class _FavoritePageState extends State<FavoritePage> {
         title, () => List.filled(filteredCategories.length, true));
 
     return Container(
-      height: 280.0.h,
+      height: 295.0.h,
       width: 165.0.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0.r),
