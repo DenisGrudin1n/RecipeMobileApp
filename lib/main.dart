@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/favorite_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
-import 'package:recipeapp/views/entrypoint.dart';
+import 'package:recipeapp/views/login/login_page.dart';
 
-Widget defaultHome = const MainScreen();
+Widget defaultHome = const LoginPage();
 
 void main() async {
   Get.put(FavoriteController());
