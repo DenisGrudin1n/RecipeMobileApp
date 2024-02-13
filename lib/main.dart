@@ -1,14 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/favorite_controller.dart';
+import 'package:recipeapp/firebase_options.dart';
 import 'package:recipeapp/views/entrypoint.dart';
 
 Widget defaultHome = const MainScreen();
 
-void main() {
+void main() async {
   Get.put(FavoriteController());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
