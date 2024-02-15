@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/services/auth_methods.dart';
 import 'package:recipeapp/views/login/signup_page.dart';
 
 class LoginForm extends StatefulWidget {
@@ -12,6 +13,24 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false;
+
+  void loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String res = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+
+    if (res == "Success") {
+      //
+    } else {}
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +70,22 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
-              // Add the code to handle the login button click here
+              // Handle the login button click here
+              loginUser();
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: const Text(
-              'Login',
-              style: TextStyle(color: kDark),
-            ),
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: kDark,
+                    ),
+                  )
+                : const Text(
+                    'Login',
+                    style: TextStyle(color: kDark),
+                  ),
           ),
           const SizedBox(height: 36.0),
           Row(

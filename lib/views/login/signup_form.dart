@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/services/auth_methods.dart';
 import 'package:recipeapp/views/login/login_page.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -12,8 +13,7 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _usernameController =
-      TextEditingController(); // Додали контролер для імені
+  final TextEditingController _usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +66,13 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
-            onPressed: () {
-              // Add the code to handle the login button click here
+            // Handle the login button click here
+            onPressed: () async {
+              String res = await AuthMethods().signUpUser(
+                  username: _usernameController.text,
+                  email: _emailController.text,
+                  password: _passwordController.text);
+              print(res);
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
