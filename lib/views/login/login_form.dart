@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/services/auth_methods.dart';
+import 'package:recipeapp/views/entrypoint.dart';
 import 'package:recipeapp/views/login/signup_page.dart';
 
 class LoginForm extends StatefulWidget {
@@ -13,23 +15,22 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool isLoading = false;
+  bool _isLoading = false;
 
   void loginUser() async {
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
-
     String res = await AuthMethods().loginUser(
         email: _emailController.text, password: _passwordController.text);
-
-    if (res == "Success") {
-      //
-    } else {}
-
-    setState(() {
-      isLoading = false;
-    });
+    if (res == 'Success') {
+      Get.offAll(const MainScreen());
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      Get.snackbar('Error', res);
+    }
   }
 
   @override
@@ -69,14 +70,11 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
-            onPressed: () {
-              // Handle the login button click here
-              loginUser();
-            },
+            onPressed: () => loginUser(),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: isLoading
+            child: _isLoading
                 ? const Center(
                     child: CircularProgressIndicator(
                       color: kDark,
@@ -95,10 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                 style: TextStyle(color: kWhite.withOpacity(0.25)),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignUpPage()),
-                ),
+                onTap: () => Get.to(const SignUpPage()),
                 child: const Text(
                   "Sign up",
                   style: TextStyle(color: kWhite),

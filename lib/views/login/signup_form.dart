@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/services/auth_methods.dart';
+import 'package:recipeapp/views/entrypoint.dart';
 import 'package:recipeapp/views/login/login_page.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -14,6 +16,32 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  bool _isLoading = false;
+
+  void signUpUser() async {
+    // set loading to true
+    setState(() {
+      _isLoading = true;
+    });
+
+    // signup user using our authmethodds
+    String res = await AuthMethods().signUpUser(
+      username: _usernameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    // if string returned is sucess, user has been created
+    if (res == "Success") {
+      // navigate to the home screen
+      Get.offAll(const MainScreen());
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      // show the error
+      Get.snackbar('Error', res);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,20 +95,20 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 20.0),
           ElevatedButton(
             // Handle the login button click here
-            onPressed: () async {
-              String res = await AuthMethods().signUpUser(
-                  username: _usernameController.text,
-                  email: _emailController.text,
-                  password: _passwordController.text);
-              print(res);
-            },
+            onPressed: () => signUpUser(),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: const Text(
-              'Sign Up',
-              style: TextStyle(color: kDark),
-            ),
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: kDark,
+                    ),
+                  )
+                : const Text(
+                    'Sign Up',
+                    style: TextStyle(color: kDark),
+                  ),
           ),
           const SizedBox(height: 36.0),
           Row(
@@ -90,10 +118,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 style: TextStyle(color: kWhite.withOpacity(0.25)),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                ),
+                onTap: () => Get.to(const LoginPage()),
                 child: const Text(
                   "Log in",
                   style: TextStyle(color: kWhite),
