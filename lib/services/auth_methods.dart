@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:recipeapp/models/user.dart' as model;
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,20 +14,25 @@ class AuthMethods {
   }) async {
     String res = "Error";
     try {
-      if (username.isNotEmpty || email.isNotEmpty || password.isNotEmpty) {
+      if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
         // register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
+        model.User user = model.User(
+            username: username,
+            email: email,
+            password: password,
+            uid: cred.user!.uid);
+
         // add user to database
-        _firestore.collection('users').doc(cred.user!.uid).set({
-          'username': username,
-          'uid': cred.user!.uid,
-          'email': email,
-          'password': password,
-        });
+        await _firestore.collection('users').doc(cred.user!.uid).set(
+              user.toJson(),
+            );
 
         res = "Success";
+      } else {
+        return "Please fill in all fields!";
       }
     } catch (err) {
       res = err.toString();
@@ -41,7 +47,7 @@ class AuthMethods {
   }) async {
     String res = "Some error occured";
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         // log in user
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
