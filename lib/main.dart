@@ -5,14 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/favorite_controller.dart';
+import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
 import 'package:recipeapp/views/entrypoint.dart';
 import 'package:recipeapp/views/login/login_page.dart';
 
 void main() async {
-  Get.put(FavoriteController());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Get.put(FavoriteController());
+  Get.put(UserController());
   runApp(const MyApp());
 }
 
