@@ -5,14 +5,14 @@ import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/views/profile/profile_page.dart';
 
-class AppBarWidget extends StatefulWidget {
-  const AppBarWidget({super.key});
+class AppBarHome extends StatefulWidget {
+  const AppBarHome({super.key});
 
   @override
-  State<AppBarWidget> createState() => _AppBarWidgetState();
+  State<AppBarHome> createState() => _AppBarHomeState();
 }
 
-class _AppBarWidgetState extends State<AppBarWidget> {
+class _AppBarHomeState extends State<AppBarHome> {
   final List<Widget> pageList = const [
     ProfilePage(),
   ];

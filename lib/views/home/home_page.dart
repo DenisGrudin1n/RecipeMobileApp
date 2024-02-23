@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: kPrimary,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(125.h),
-        child: const AppBarWidget(),
+        child: const AppBarHome(),
       ),
       body: const SafeArea(
         child: Column(children: [DailyMealBlock(), CategoryList()]),

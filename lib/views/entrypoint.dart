@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:recipeapp/views/add/add_page.dart';
+import 'package:recipeapp/views/add/add_recipe_page.dart';
 import 'package:recipeapp/views/cart/cart_page.dart';
 import 'package:recipeapp/views/favorite/favorite_page.dart';
 import 'package:recipeapp/views/home/home_page.dart';
@@ -15,7 +15,7 @@ class MainScreen extends StatelessWidget {
   final List<Widget> pageList = const [
     HomePage(),
     FavoritePage(),
-    AddPage(),
+    AddRecipePage(),
     CartPage(),
     SettingsPage(),
   ];

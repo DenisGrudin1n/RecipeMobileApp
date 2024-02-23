@@ -93,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                 style: TextStyle(color: kWhite.withOpacity(0.25)),
               ),
               GestureDetector(
-                onTap: () => Get.to(const SignUpPage()),
+                onTap: () => Get.to(() => const SignUpPage()),
                 child: const Text(
                   "Sign up",
                   style: TextStyle(color: kWhite),
