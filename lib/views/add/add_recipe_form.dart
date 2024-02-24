@@ -1,9 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/constants/uidata.dart';
 
-class AddRecipeForm extends StatelessWidget {
+class AddRecipeForm extends StatefulWidget {
   const AddRecipeForm({Key? key}) : super(key: key);
+
+  @override
+  State<AddRecipeForm> createState() => _AddRecipeFormState();
+}
+
+class _AddRecipeFormState extends State<AddRecipeForm> {
+  String selectedCategory = 'Select Category';
+
+  List<String> categories = dishCategories;
+
+  void _selectCategory(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Category'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: categories.map((category) {
+                return ListTile(
+                  title: Text(category),
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                    Get.back();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +66,21 @@ class AddRecipeForm extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                'Title',
+                style: TextStyle(color: kWhite),
+              ),
+              TextFormField(
+                style: const TextStyle(color: kWhite),
+                keyboardType: TextInputType.text,
+                maxLength: 50,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: 'Enter title',
+                  hintStyle: TextStyle(color: kWhite.withOpacity(0.5)),
+                ),
+              ),
+              const SizedBox(height: 10),
               const Text(
                 'Picture',
                 style: TextStyle(color: kWhite),
@@ -58,9 +109,7 @@ class AddRecipeForm extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               GestureDetector(
-                onTap: () {
-                  // Додати обробник для відкриття вікна з категоріями
-                },
+                onTap: () => _selectCategory(context),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(10),
@@ -68,9 +117,9 @@ class AddRecipeForm extends StatelessWidget {
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Text(
-                    'Select Category',
-                    style: TextStyle(color: kWhite),
+                  child: Text(
+                    selectedCategory,
+                    style: const TextStyle(color: kWhite),
                   ),
                 ),
               ),
@@ -83,6 +132,7 @@ class AddRecipeForm extends StatelessWidget {
               TextFormField(
                 style: const TextStyle(color: kWhite),
                 keyboardType: TextInputType.number,
+                maxLength: 5,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   hintText: 'Enter cook time',
@@ -97,8 +147,11 @@ class AddRecipeForm extends StatelessWidget {
               const SizedBox(height: 10),
               TextFormField(
                 style: const TextStyle(color: kWhite),
-                maxLines: null,
+                maxLines: 20,
+                minLines: 1,
+                maxLength: 20 * 50,
                 keyboardType: TextInputType.multiline,
+                cursorColor: kWhite,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   hintText: 'Enter recipe description',
@@ -111,7 +164,7 @@ class AddRecipeForm extends StatelessWidget {
                   // Додати обробник для публікації рецепту
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: kWhite,
+                  backgroundColor: kWhite,
                 ),
                 child: const Text('Post'),
               ),

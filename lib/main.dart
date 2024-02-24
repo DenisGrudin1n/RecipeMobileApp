@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/favorite_controller.dart';
+import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
 import 'package:recipeapp/views/entrypoint.dart';
@@ -13,9 +14,16 @@ import 'package:recipeapp/views/login/login_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Get.put(FavoriteController());
-  Get.put(UserController());
   runApp(const MyApp());
+}
+
+class AppBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<FavoriteController>(() => FavoriteController());
+    Get.lazyPut<UserController>(() => UserController());
+    Get.lazyPut<TabIndexController>(() => TabIndexController());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -36,6 +44,7 @@ class MyApp extends StatelessWidget {
             iconTheme: const IconThemeData(color: kDark),
             primarySwatch: Colors.grey,
           ),
+          initialBinding: AppBindings(),
           home: StreamBuilder(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
