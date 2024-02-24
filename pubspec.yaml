@@ -64,6 +64,7 @@ dependencies:
   json_annotation: ^4.8.1
   shared_preferences: ^2.2.2
   cloud_firestore: ^4.15.4
+  image_picker: ^1.0.7
 
 
 dev_dependencies:

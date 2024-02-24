@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/constants/uidata.dart';
 
@@ -38,6 +40,59 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
           ),
         );
       },
+    );
+  }
+
+  File? _image;
+  final picker = ImagePicker();
+
+//Image Picker function to get image from gallery
+  Future getImageFromGallery() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+//Image Picker function to get image from camera
+  Future getImageFromCamera() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+  Future<void> showOptions(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select an option'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+                getImageFromGallery();
+              },
+              child: const Text('Photo Gallery'),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                getImageFromCamera();
+              },
+              child: const Text('Camera'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -87,19 +142,19 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               ),
               const SizedBox(height: 10),
               GestureDetector(
-                onTap: () {
-                  // Додати обробник для додавання фото
-                },
+                onTap: () => showOptions(context),
                 child: Container(
                   width: double.infinity,
                   height: 200,
                   color: Colors.grey.withOpacity(0.3),
-                  child: const Center(
-                    child: Text(
-                      'Add Photo',
-                      style: TextStyle(color: kWhite),
-                    ),
-                  ),
+                  child: _image == null
+                      ? const Center(child: Text('No Image selected'))
+                      : FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.file(
+                            _image!,
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 20),
