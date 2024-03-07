@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/controllers/custom_recipe_controller.dart';
 import 'package:recipeapp/controllers/favorite_controller.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
-import 'package:recipeapp/views/add/add_recipe_page.dart';
 import 'package:recipeapp/views/entrypoint.dart';
 import 'package:recipeapp/views/login/login_page.dart';
 

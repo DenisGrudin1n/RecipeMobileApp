@@ -4,16 +4,18 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/constants/uidata.dart';
+import 'package:recipeapp/controllers/user_controller.dart';
+import 'package:recipeapp/models/custom_recipe.dart';
 
-class AddRecipeForm extends StatefulWidget {
-  const AddRecipeForm({Key? key}) : super(key: key);
+class AddCustomRecipeForm extends StatefulWidget {
+  const AddCustomRecipeForm({Key? key}) : super(key: key);
 
   @override
-  State<AddRecipeForm> createState() => _AddRecipeFormState();
+  State<AddCustomRecipeForm> createState() => _AddCustomRecipeFormState();
 }
 
-class _AddRecipeFormState extends State<AddRecipeForm> {
-  String selectedCategory = 'Select Category';
+class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
+  String selectedCategory = '';
 
   List<String> categories = dishCategories;
 
@@ -21,12 +23,19 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
   late TextEditingController _cookTimeController;
   late TextEditingController _descriptionController;
 
+  UserController userController = Get.find();
+
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController();
     _cookTimeController = TextEditingController();
     _descriptionController = TextEditingController();
+    addData();
+  }
+
+  addData() async {
+    await userController.refreshUser();
   }
 
   @override
@@ -247,15 +256,16 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                   String category = selectedCategory;
                   String cookTime = _cookTimeController.text;
                   String description = _descriptionController.text;
+                  String postedBy = userController.getUser?.username ?? '';
 
                   // Створення об'єкта Recipe
-                  Recipe recipe = Recipe(
-                    title: title,
-                    imageUrl: imageUrl,
-                    category: category,
-                    cookTime: cookTime,
-                    description: description,
-                  );
+                  CustomRecipe recipe = CustomRecipe(
+                      title: title,
+                      imageUrl: imageUrl,
+                      category: category,
+                      cookTime: cookTime,
+                      description: description,
+                      postedBy: postedBy);
 
                   // Відправлення даних назад до попередньої сторінки
                   Get.back(result: recipe);
@@ -263,7 +273,10 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kWhite,
                 ),
-                child: const Text('Post'),
+                child: const Text(
+                  'Post',
+                  style: TextStyle(color: kDark, fontSize: 12),
+                ),
               ),
             ],
           ),
@@ -271,20 +284,4 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
       ),
     );
   }
-}
-
-class Recipe {
-  final String title;
-  final String imageUrl;
-  final String category;
-  final String cookTime;
-  final String description;
-
-  Recipe({
-    required this.title,
-    required this.imageUrl,
-    required this.category,
-    required this.cookTime,
-    required this.description,
-  });
 }
