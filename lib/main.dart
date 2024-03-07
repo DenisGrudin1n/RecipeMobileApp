@@ -8,6 +8,7 @@ import 'package:recipeapp/controllers/favorite_controller.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
+import 'package:recipeapp/views/add/add_recipe_page.dart';
 import 'package:recipeapp/views/entrypoint.dart';
 import 'package:recipeapp/views/login/login_page.dart';
 
@@ -23,6 +24,7 @@ class AppBindings extends Bindings {
     Get.lazyPut<FavoriteController>(() => FavoriteController());
     Get.lazyPut<UserController>(() => UserController());
     Get.lazyPut<TabIndexController>(() => TabIndexController());
+    Get.lazyPut<CustomRecipeController>(() => CustomRecipeController());
   }
 }
 

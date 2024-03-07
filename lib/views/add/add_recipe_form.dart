@@ -17,6 +17,26 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
 
   List<String> categories = dishCategories;
 
+  late TextEditingController _titleController;
+  late TextEditingController _cookTimeController;
+  late TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController();
+    _cookTimeController = TextEditingController();
+    _descriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _cookTimeController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   void _selectCategory(BuildContext context) {
     showDialog(
       context: context,
@@ -126,6 +146,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 style: TextStyle(color: kWhite),
               ),
               TextFormField(
+                controller: _titleController,
                 style: const TextStyle(color: kWhite),
                 keyboardType: TextInputType.text,
                 maxLength: 50,
@@ -185,6 +206,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               ),
               const SizedBox(height: 10),
               TextFormField(
+                controller: _cookTimeController,
                 style: const TextStyle(color: kWhite),
                 keyboardType: TextInputType.number,
                 maxLength: 5,
@@ -201,6 +223,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               ),
               const SizedBox(height: 10),
               TextFormField(
+                controller: _descriptionController,
                 style: const TextStyle(color: kWhite),
                 maxLines: 20,
                 minLines: 1,
@@ -216,7 +239,26 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Додати обробник для публікації рецепту
+                  // Отримання даних форми
+                  String title = _titleController.text;
+                  String imageUrl = _image != null
+                      ? _image!.path
+                      : ''; // Передаємо шлях до зображення
+                  String category = selectedCategory;
+                  String cookTime = _cookTimeController.text;
+                  String description = _descriptionController.text;
+
+                  // Створення об'єкта Recipe
+                  Recipe recipe = Recipe(
+                    title: title,
+                    imageUrl: imageUrl,
+                    category: category,
+                    cookTime: cookTime,
+                    description: description,
+                  );
+
+                  // Відправлення даних назад до попередньої сторінки
+                  Get.back(result: recipe);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kWhite,
@@ -229,4 +271,20 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
       ),
     );
   }
+}
+
+class Recipe {
+  final String title;
+  final String imageUrl;
+  final String category;
+  final String cookTime;
+  final String description;
+
+  Recipe({
+    required this.title,
+    required this.imageUrl,
+    required this.category,
+    required this.cookTime,
+    required this.description,
+  });
 }
