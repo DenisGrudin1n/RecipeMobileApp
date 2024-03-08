@@ -78,7 +78,7 @@ class _AddCustomRecipePageState extends State<AddCustomRecipePage> {
                     maxCrossAxisExtent: 300,
                     mainAxisSpacing: 0,
                     crossAxisSpacing: 0,
-                    childAspectRatio: 2 / 3,
+                    childAspectRatio: 3 / 5,
                   ),
                   itemCount: recipes.length,
                   itemBuilder: (context, index) {
@@ -95,75 +95,77 @@ class _AddCustomRecipePageState extends State<AddCustomRecipePage> {
   }
 
   Widget buildRecipeCard(CustomRecipe recipe) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      color: kGray2,
-      child: GestureDetector(
-        onTap: () {
-          // Відкриття фотографії в повний розмір
-          Get.to(() => PhotoView(
-                imageProvider: FileImage(File(recipe.imageUrl)),
-              ));
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Center(
-                child: Container(
-                  height: 110.0.h,
-                  width: width,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    //borderRadius: BorderRadius.circular(25.0),
-                    image: DecorationImage(
-                      image: FileImage(File(recipe
-                          .imageUrl)), // Використовуємо шлях до зображення
-                      fit: BoxFit.cover,
+    return IntrinsicHeight(
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        color: kGray2,
+        child: GestureDetector(
+          onTap: () {
+            // Відкриття фотографії в повний розмір
+            Get.to(() => PhotoView(
+                  imageProvider: FileImage(File(recipe.imageUrl)),
+                ));
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Center(
+                  child: Container(
+                    height: 110.0.h,
+                    width: width,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      //borderRadius: BorderRadius.circular(25.0),
+                      image: DecorationImage(
+                        image: FileImage(File(recipe
+                            .imageUrl)), // Використовуємо шлях до зображення
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Відображення опису
-                _showDescriptionDialog(recipe.description);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Title: ${recipe.title}',
-                      style: const TextStyle(fontSize: 12, color: kWhite),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Category: ${recipe.category}',
-                      style: const TextStyle(fontSize: 12, color: kWhite),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Cook Time: ${recipe.cookTime} min',
-                      style: const TextStyle(fontSize: 12, color: kWhite),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Posted by: ${recipe.postedBy}',
-                      style: const TextStyle(fontSize: 12, color: kWhite),
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () {
+                  // Відображення опису
+                  _showDescriptionDialog(recipe.description);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Title: ${recipe.title}',
+                        style: const TextStyle(fontSize: 11, color: kWhite),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Category: ${recipe.category}',
+                        style: const TextStyle(fontSize: 11, color: kWhite),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Cook Time: ${recipe.cookTime}',
+                        style: const TextStyle(fontSize: 11, color: kWhite),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Posted by: ${recipe.postedBy}',
+                        style: const TextStyle(fontSize: 11, color: kWhite),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,7 @@ class AddCustomRecipeForm extends StatefulWidget {
 }
 
 class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
-  String selectedCategory = '';
+  String selectedCategory = 'Not Selected';
 
   List<String> categories = dishCategories;
 
@@ -101,7 +101,10 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Select an option'),
+        title: const Text(
+          'Select an option',
+          style: TextStyle(fontSize: 20, color: kDark),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -110,14 +113,15 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 Get.back();
                 getImageFromGallery();
               },
-              child: const Text('Photo Gallery'),
+              child:
+                  const Text('Photo Gallery', style: TextStyle(fontSize: 14)),
             ),
             TextButton(
               onPressed: () {
                 Get.back();
                 getImageFromCamera();
               },
-              child: const Text('Camera'),
+              child: const Text('Camera', style: TextStyle(fontSize: 14)),
             ),
           ],
         ),
@@ -255,8 +259,28 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                       : ''; // Передаємо шлях до зображення
                   String category = selectedCategory;
                   String cookTime = _cookTimeController.text;
+                  if (cookTime.isEmpty) {
+                    cookTime = "Not Specified";
+                  } else {
+                    cookTime += " min";
+                  }
                   String description = _descriptionController.text;
+                  if (description.isEmpty) {
+                    description = "There is no description for this recipe";
+                  }
                   String postedBy = userController.getUser?.username ?? '';
+
+                  // Перевірка чи поля "Title" та "Image" заповнені
+                  if (title.isEmpty || imageUrl.isEmpty) {
+                    // Повідомлення про помилку, якщо поля не заповнені
+                    Get.snackbar(
+                      'Error',
+                      'Please fill in the Title and select an Image.',
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    return;
+                  }
 
                   // Створення об'єкта Recipe
                   CustomRecipe recipe = CustomRecipe(
