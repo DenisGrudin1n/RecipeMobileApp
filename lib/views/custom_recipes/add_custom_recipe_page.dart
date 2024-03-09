@@ -8,29 +8,20 @@ import 'package:recipeapp/controllers/custom_recipe_controller.dart';
 import 'package:recipeapp/models/custom_recipe.dart';
 import 'package:recipeapp/views/custom_recipes/add_custom_recipe_form.dart';
 
-class AddCustomRecipePage extends StatefulWidget {
-  const AddCustomRecipePage({super.key});
-
-  @override
-  State<AddCustomRecipePage> createState() => _AddCustomRecipePageState();
-}
-
-class _AddCustomRecipePageState extends State<AddCustomRecipePage> {
-  late CustomRecipeController customRecipeController;
-
-  @override
-  void initState() {
-    super.initState();
-    customRecipeController = Get.find();
-  }
+class AddCustomRecipePage extends StatelessWidget {
+  const AddCustomRecipePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final customRecipeController = Get.find<CustomRecipeController>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Custom Recipes',
-            style: TextStyle(
-                color: kWhite, fontSize: 18, fontWeight: FontWeight.w500)),
+        title: const Text(
+          'Custom Recipes',
+          style: TextStyle(
+              color: kWhite, fontSize: 18, fontWeight: FontWeight.w500),
+        ),
         backgroundColor: kPrimary,
         actions: [
           TextButton(
@@ -104,7 +95,6 @@ class _AddCustomRecipePageState extends State<AddCustomRecipePage> {
         color: kGray2,
         child: GestureDetector(
           onTap: () {
-            // Відкриття фотографії в повний розмір
             Get.to(() => PhotoView(
                   imageProvider: FileImage(File(recipe.imageUrl)),
                 ));
@@ -121,10 +111,8 @@ class _AddCustomRecipePageState extends State<AddCustomRecipePage> {
                     width: width,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      //borderRadius: BorderRadius.circular(25.0),
                       image: DecorationImage(
-                        image: FileImage(File(recipe
-                            .imageUrl)), // Використовуємо шлях до зображення
+                        image: FileImage(File(recipe.imageUrl)),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -133,7 +121,6 @@ class _AddCustomRecipePageState extends State<AddCustomRecipePage> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Відображення опису
                   _showDescriptionDialog(recipe.description);
                 },
                 child: Padding(

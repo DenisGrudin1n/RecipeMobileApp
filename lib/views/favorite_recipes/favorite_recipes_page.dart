@@ -1,33 +1,17 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
-import 'package:recipeapp/constants/uidata.dart';
-import 'package:recipeapp/controllers/favorite_controller.dart';
+import 'package:recipeapp/controllers/recipe_controller.dart';
+import 'package:recipeapp/models/recipe.dart';
 
-class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key}) : super(key: key);
-
-  @override
-  _FavoritePageState createState() => _FavoritePageState();
-}
-
-class _FavoritePageState extends State<FavoritePage> {
-  late FavoriteController favoriteController;
-  int startCategoryIndex = 0;
-  String selectedFoodCategory = dishCategories.first;
-  Map<String, List<bool>> isFavoriteMap = {};
-  Timer? _removeFavoritesTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    favoriteController = Get.find();
-  }
+class FavoriteRecipesPage extends StatelessWidget {
+  const FavoriteRecipesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final favoriteRecipeController = Get.find<RecipeController>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -43,16 +27,16 @@ class _FavoritePageState extends State<FavoritePage> {
             width: width,
             color: kPrimary,
           ),
-          _buildFavoriteRecipesList(),
+          _buildFavoriteRecipesList(favoriteRecipeController),
         ],
       ),
     );
   }
 
-  Widget _buildFavoriteRecipesList() {
-    return GetX<FavoriteController>(
+  Widget _buildFavoriteRecipesList(RecipeController favoriteController) {
+    return GetX<RecipeController>(
       builder: (favoriteController) {
-        List<FavoriteRecipe> recipes = favoriteController.favoriteRecipes;
+        List<Recipe> recipes = favoriteController.favoriteRecipes;
         if (recipes.isEmpty) {
           return const Center(
             child: Text(
@@ -76,11 +60,11 @@ class _FavoritePageState extends State<FavoritePage> {
                   ),
                   child: Row(
                     children: [
-                      buildFavoriteRecipeContainer(recipes[index],
+                      _buildFavoriteRecipeContainer(recipes[index],
                           recipeIndex: index),
                       if (index + 1 < recipes.length) const Spacer(),
                       if (index + 1 < recipes.length)
-                        buildFavoriteRecipeContainer(recipes[index + 1],
+                        _buildFavoriteRecipeContainer(recipes[index + 1],
                             recipeIndex: index),
                     ],
                   ),
@@ -95,17 +79,14 @@ class _FavoritePageState extends State<FavoritePage> {
     );
   }
 
-  Widget buildFavoriteRecipeContainer(FavoriteRecipe recipe,
+  Widget _buildFavoriteRecipeContainer(Recipe recipe,
       {required int recipeIndex}) {
-    List<Map<String, String>> filteredCategories = dishes
-        .where((category) => category['foodCategory'] == selectedFoodCategory)
-        .toList();
+    final RecipeController favoriteRecipeController = Get.find();
     final title = recipe.title;
     final imageUrl = recipe.imageUrl;
     final stars = int.parse(recipe.stars);
     final cookTime = recipe.cookTime;
     final level = recipe.level;
-    final foodCategory = recipe.foodCategory;
 
     final splittedTitle = title.split(' ');
     final firstTitlePart = (splittedTitle.length > 1)
@@ -115,11 +96,8 @@ class _FavoritePageState extends State<FavoritePage> {
         ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
         : '';
 
-    isFavoriteMap.putIfAbsent(
-        title, () => List.filled(filteredCategories.length, true));
-
     return Container(
-      height: 295.0.h,
+      height: 300.0.h,
       width: 165.0.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0.r),
@@ -128,40 +106,24 @@ class _FavoritePageState extends State<FavoritePage> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 10.0, top: 10.0),
+            padding: const EdgeInsets.only(right: 10.0),
             child: Align(
               alignment: Alignment.centerRight,
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    isFavoriteMap[title]![recipeIndex] =
-                        !isFavoriteMap[title]![recipeIndex];
-
-                    final recipe = FavoriteRecipe(
-                      title: title,
-                      imageUrl: imageUrl,
-                      stars: stars.toString(),
-                      cookTime: cookTime,
-                      level: level,
-                      foodCategory: foodCategory,
-                    );
-
-                    if (isFavoriteMap[title]![recipeIndex]) {
-                      _cancelDelayedRemoveFromFavorites();
-                    } else {
-                      favoriteController.removeFromFavorites(recipe);
-                    }
-                  });
-                  _delayedRemoveFromFavorites(
-                      recipe, !isFavoriteMap[title]![recipeIndex]);
+              child: IconButton(
+                onPressed: () {
+                  favoriteRecipeController.toggleFavorite(recipe);
                 },
-                child: Icon(
-                  isFavoriteMap[title]![recipeIndex]
-                      ? Icons.favorite
-                      : Icons.favorite_outline,
-                  color: Colors.red,
-                  size: 24.0,
-                ),
+                icon: favoriteRecipeController.isFavorite(recipe)
+                    ? const Icon(
+                        Icons.favorite,
+                        size: 24.0,
+                        color: Colors.red,
+                      )
+                    : const Icon(
+                        Icons.favorite_outline,
+                        size: 24.0,
+                        color: Colors.red,
+                      ),
               ),
             ),
           ),
@@ -169,8 +131,8 @@ class _FavoritePageState extends State<FavoritePage> {
             child: Image.network(
               imageUrl,
               alignment: Alignment.topCenter,
-              height: 110.0.h,
-              width: 100.0.w,
+              height: 100.0.h,
+              width: 90.0.w,
               fit: BoxFit.cover,
             ),
           ),
@@ -276,18 +238,5 @@ class _FavoritePageState extends State<FavoritePage> {
         ],
       ),
     );
-  }
-
-  void _cancelDelayedRemoveFromFavorites() {
-    _removeFavoritesTimer?.cancel();
-  }
-
-  void _delayedRemoveFromFavorites(FavoriteRecipe recipe, bool wasFavorite) {
-    const Duration delay = Duration(seconds: 1);
-    _removeFavoritesTimer = Timer(delay, () {
-      if (wasFavorite && favoriteController.isFavorite(recipe)) {
-        favoriteController.removeFromFavorites(recipe);
-      }
-    });
   }
 }

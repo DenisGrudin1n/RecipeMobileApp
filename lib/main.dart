@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/custom_recipe_controller.dart';
-import 'package:recipeapp/controllers/favorite_controller.dart';
+import 'package:recipeapp/controllers/recipe_controller.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
@@ -21,10 +21,10 @@ void main() async {
 class AppBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<FavoriteController>(() => FavoriteController());
-    Get.lazyPut<UserController>(() => UserController());
-    Get.lazyPut<TabIndexController>(() => TabIndexController());
-    Get.lazyPut<CustomRecipeController>(() => CustomRecipeController());
+    Get.put<RecipeController>(RecipeController());
+    Get.put<UserController>(UserController());
+    Get.put<TabIndexController>(TabIndexController());
+    Get.put<CustomRecipeController>(CustomRecipeController());
   }
 }
 

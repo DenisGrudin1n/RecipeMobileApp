@@ -4,7 +4,8 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/constants/uidata.dart';
-import 'package:recipeapp/controllers/favorite_controller.dart';
+import 'package:recipeapp/controllers/recipe_controller.dart';
+import 'package:recipeapp/models/recipe.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({Key? key}) : super(key: key);
@@ -16,19 +17,17 @@ class CategoryList extends StatefulWidget {
 class _CategoryListState extends State<CategoryList> {
   int startCategoryIndex = 0;
   String selectedFoodCategory = dishCategories.first;
-  Map<String, List<bool>> isFavoriteMap = {};
   List<Map<String, String>> get filteredCategories {
     return dishes
         .where((category) => category['foodCategory'] == selectedFoodCategory)
         .toList();
   }
 
-  late FavoriteController favoriteController;
+  final favoriteRecipeController = Get.find<RecipeController>();
 
   @override
   void initState() {
     super.initState();
-    favoriteController = Get.find();
   }
 
   void _changeCategory(bool isIncrement) {
@@ -55,11 +54,17 @@ class _CategoryListState extends State<CategoryList> {
         ? splittedTitle.skip((splittedTitle.length) ~/ 2).join(' ')
         : '';
 
-    isFavoriteMap.putIfAbsent(
-        title, () => List.filled(filteredCategories.length, false));
+    final recipe = Recipe(
+      title: title,
+      imageUrl: imageUrl,
+      stars: stars.toString(),
+      cookTime: category['cookTime']!,
+      level: category['level']!,
+      foodCategory: category['foodCategory']!,
+    );
 
     return Container(
-      height: 295.0.h,
+      height: 300.0.h,
       width: 165.0.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0.r),
@@ -68,36 +73,28 @@ class _CategoryListState extends State<CategoryList> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 10.0, top: 10.0),
+            padding: const EdgeInsets.only(
+              right: 10.0,
+            ),
             child: Align(
               alignment: Alignment.centerRight,
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    isFavoriteMap[title]![index] =
-                        !isFavoriteMap[title]![index];
-                    final isFavorite = isFavoriteMap[title]![index];
-                    final recipe = FavoriteRecipe(
-                      title: title,
-                      imageUrl: imageUrl,
-                      stars: stars.toString(),
-                      cookTime: category['cookTime']!,
-                      level: category['level']!,
-                      foodCategory: category['foodCategory']!,
-                    );
-
-                    isFavorite
-                        ? favoriteController.addToFavorites(recipe)
-                        : favoriteController.removeFromFavorites(recipe);
-                  });
+              child: IconButton(
+                onPressed: () {
+                  favoriteRecipeController.toggleFavorite(recipe);
                 },
-                child: Icon(
-                  isFavoriteMap[title]![index]
-                      ? Icons.favorite
-                      : Icons.favorite_outline,
-                  color: Colors.red,
-                  size: 24.0,
-                ),
+                icon: Obx(() {
+                  return favoriteRecipeController.isFavorite(recipe)
+                      ? const Icon(
+                          Icons.favorite,
+                          size: 24.0,
+                          color: Colors.red,
+                        )
+                      : const Icon(
+                          Icons.favorite_outline,
+                          size: 24.0,
+                          color: Colors.red,
+                        );
+                }),
               ),
             ),
           ),
@@ -105,8 +102,8 @@ class _CategoryListState extends State<CategoryList> {
             child: Image.network(
               imageUrl,
               alignment: Alignment.topCenter,
-              height: 110.0.h,
-              width: 100.0.w,
+              height: 100.0.h,
+              width: 90.0.w,
               fit: BoxFit.cover,
             ),
           ),
