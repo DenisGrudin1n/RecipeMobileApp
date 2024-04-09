@@ -73,12 +73,9 @@ class MainScreen extends StatelessWidget {
                     const BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: 15.0, right: 7.5),
-                          child: Badge(
-                              label: Text('1'),
-                              backgroundColor: kRed,
-                              child: Icon(AntDesign.shoppingcart)),
+                          child: Icon(Icons.map_outlined),
                         ),
-                        label: 'Shopping Cart'),
+                        label: 'Google Maps'),
                     const BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: 15.0, right: 15.0),
