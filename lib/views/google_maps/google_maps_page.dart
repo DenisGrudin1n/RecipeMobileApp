@@ -16,14 +16,15 @@ class GoogleMapsPage extends StatefulWidget {
 class _GoogleMapsPageState extends State<GoogleMapsPage> {
   late GoogleMapController mapController;
   LatLng? currentLocation;
-  LatLng? defaultLocation;
+  static const double defaultLatitude = 3.824261045284873;
+  static const double defaultLongitude = -73.46432104496374;
+  LatLng? defaultLocation = const LatLng(defaultLatitude, defaultLongitude);
   List<LatLng> nearbyStoreLocations = [];
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
-    _getNearbyStores();
   }
 
   void _getCurrentLocation() async {
@@ -44,16 +45,22 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
+      defaultLocation = const LatLng(defaultLatitude, defaultLongitude);
     });
+
+    _getNearbyStores();
   }
 
   Future<void> _getNearbyStores() async {
     const apiKey = 'AIzaSyDqxWKh05mRB7KnqohBeUepeL6b55dU2uY';
-    const radius = 2000; // Радіус пошуку магазинів (у метрах)
+    const radius = 10000; // Радіус пошуку магазинів (у метрах)
 
     if (currentLocation != null) {
-      final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation!.latitude},${currentLocation!.longitude}&radius=$radius&type=grocery_or_supermarket&key=$apiKey'));
+      final latitude = currentLocation!.latitude;
+      final longitude = currentLocation!.longitude;
+
+      var response = await http.get(Uri.parse(
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&keyword=Grocery store|supermarket|restaurant&language=en&key=$apiKey'));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -67,17 +74,13 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
 
         setState(() {});
       }
-    } else {
-      // Додати жорстко закодовані координати для стандартної локації
-      const double defaultLatitude = 40.7128; // Нью-Йорк
-      const double defaultLongitude = -74.0060;
-      defaultLocation = const LatLng(defaultLatitude, defaultLongitude);
+    }
+    if (defaultLocation != null) {
+      final responseDefault = await http.get(Uri.parse(
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$defaultLatitude,$defaultLongitude&radius=$radius&keyword=Grocery store|supermarket|restaurant&language=en&key=$apiKey'));
 
-      final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$defaultLatitude,$defaultLongitude&radius=$radius&type=grocery_or_supermarket&key=$apiKey'));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+      if (responseDefault.statusCode == 200) {
+        final data = jsonDecode(responseDefault.body);
         final results = data['results'];
 
         for (var result in results) {
@@ -124,7 +127,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
                           icon: BitmapDescriptor.defaultMarker,
                         ),
                         Marker(
-                          markerId: const MarkerId('currentLocation'),
+                          markerId: const MarkerId('defaultLocation'),
                           position: defaultLocation!,
                           icon: BitmapDescriptor.defaultMarker,
                         ),
