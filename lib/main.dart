@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/custom_recipe_controller.dart';
+import 'package:recipeapp/controllers/google_maps_controller.dart';
 import 'package:recipeapp/controllers/recipe_controller.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
@@ -25,6 +26,7 @@ class AppBindings extends Bindings {
     Get.put<UserController>(UserController());
     Get.put<TabIndexController>(TabIndexController());
     Get.put<CustomRecipeController>(CustomRecipeController());
+    Get.put<GoogleMapsController>(GoogleMapsController());
   }
 }
 
