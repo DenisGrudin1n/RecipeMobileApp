@@ -67,6 +67,7 @@ dependencies:
   image_picker: ^1.0.7
   photo_view: ^0.14.0
   flutter_settings_screen_ex: ^0.0.1+5
+  provider: ^6.1.2
 
 
 dev_dependencies:

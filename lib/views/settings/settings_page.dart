@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:recipeapp/constants/constants.dart';
+import 'package:recipeapp/controllers/theme_controller.dart';
+import 'package:recipeapp/themes/themes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color textColor =
+        theme.brightness == Brightness.light ? Colors.black : Colors.white;
+    final Color dividerColor = theme.brightness == Brightness.light
+        ? Colors.grey.shade900
+        : Colors.grey.shade400;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -19,7 +29,7 @@ class SettingsPage extends StatelessWidget {
           Container(
             height: height,
             width: width,
-            color: kPrimary,
+            color: theme.colorScheme.background,
           ),
           ListView(
             padding:
@@ -29,16 +39,45 @@ class SettingsPage extends StatelessWidget {
                 title: 'Dark Mode',
                 icon: Icons.dark_mode,
                 toggle: true,
+                textColor: textColor,
+                onChanged: (value) {
+                  Provider.of<ThemeController>(context, listen: false)
+                      .toggleTheme();
+                },
+                switchValue:
+                    Provider.of<ThemeController>(context).themeData == darkMode,
               ),
-              const Divider(),
+              Divider(color: dividerColor),
               _buildSettingItem(
                 title: 'General Settings',
                 isHeader: true,
+                textColor: textColor,
               ),
               _buildSettingItem(
                 title: 'Notifications',
                 icon: Icons.notifications,
                 toggle: true,
+                textColor: textColor,
+                onChanged: (value) {
+                  // Handle notifications toggle
+                },
+                switchValue: false, // Initial value for notifications toggle
+              ),
+              _buildSettingItem(
+                title: 'Language',
+                icon: Icons.language,
+                textColor: textColor,
+              ),
+              Divider(color: dividerColor),
+              _buildSettingItem(
+                title: 'Account Settings',
+                isHeader: true,
+                textColor: textColor,
+              ),
+              _buildSettingItem(
+                title: 'Change Password',
+                icon: Icons.lock,
+                textColor: textColor,
               ),
               _buildSettingItem(
                 title: 'Logout',
@@ -46,6 +85,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   // Handle logout
                 },
+                textColor: textColor,
               ),
               _buildSettingItem(
                 title: 'Delete Account',
@@ -53,19 +93,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   // Handle delete account
                 },
-              ),
-              const Divider(),
-              _buildSettingItem(
-                title: 'Account Settings',
-                isHeader: true,
-              ),
-              _buildSettingItem(
-                title: 'Language',
-                icon: Icons.language,
-              ),
-              _buildSettingItem(
-                title: 'Change Password',
-                icon: Icons.lock,
+                textColor: textColor,
               ),
             ],
           ),
@@ -80,20 +108,21 @@ class SettingsPage extends StatelessWidget {
     bool toggle = false,
     bool isHeader = false,
     VoidCallback? onTap,
+    required Color textColor,
+    bool switchValue = true,
+    ValueChanged<bool>? onChanged,
   }) {
     return ListTile(
-      title: Text(title, style: const TextStyle(color: kWhite)),
-      leading: icon != null ? Icon(icon, color: kWhite) : null,
+      title: Text(title, style: TextStyle(color: textColor)),
+      leading: icon != null ? Icon(icon, color: textColor) : null,
       trailing: isHeader
           ? null
           : toggle
               ? Switch(
-                  value: true, // Change this to control the toggle
-                  onChanged: (value) {
-                    // Handle toggle change
-                  },
+                  value: switchValue,
+                  onChanged: onChanged,
                 )
-              : const Icon(Icons.arrow_forward_ios, color: kWhite),
+              : Icon(Icons.arrow_forward_ios, color: textColor),
       onTap: onTap,
     );
   }

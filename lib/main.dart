@@ -3,11 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/custom_recipe_controller.dart';
 import 'package:recipeapp/controllers/google_maps_controller.dart';
 import 'package:recipeapp/controllers/recipe_controller.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
+import 'package:recipeapp/controllers/theme_controller.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/firebase_options.dart';
 import 'package:recipeapp/views/entrypoint.dart';
@@ -16,7 +18,8 @@ import 'package:recipeapp/views/login/login_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ThemeController(), child: const MyApp()));
 }
 
 class AppBindings extends Bindings {
@@ -43,11 +46,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Recipe',
-          theme: ThemeData(
-            scaffoldBackgroundColor: kOffWhite,
-            iconTheme: const IconThemeData(color: kDark),
-            primarySwatch: Colors.grey,
-          ),
+          theme: Provider.of<ThemeController>(context).themeData,
           initialBinding: AppBindings(),
           home: StreamBuilder(
               stream: FirebaseAuth.instance.authStateChanges(),
