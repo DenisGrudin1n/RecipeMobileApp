@@ -27,7 +27,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
 
   void _loadData() async {
     LatLng? currentLocation = await _mapsController.fetchCurrentLocation();
-    if (currentLocation != null) {
+    if (currentLocation != null && mounted) {
       setState(() {
         this.currentLocation = currentLocation;
       });
@@ -40,7 +40,9 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
         await _mapsController.fetchNearbyStores(defaultLocation!);
     nearbyStoreLocations.addAll(defaultStores);
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

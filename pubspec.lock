@@ -355,6 +355,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.9.0"
+  flutter_settings_screen_ex:
+    dependency: "direct main"
+    description:
+      name: flutter_settings_screen_ex
+      sha256: "258f0ba2c2b5a9c40b60c219c29cc6183229fcd4e68f212bed1b9485397d44bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1+5"
   flutter_svg:
     dependency: "direct main"
     description:
