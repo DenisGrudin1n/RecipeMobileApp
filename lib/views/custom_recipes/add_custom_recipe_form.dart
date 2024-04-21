@@ -6,6 +6,7 @@ import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/constants/uidata.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
 import 'package:recipeapp/models/custom_recipe.dart';
+import 'package:recipeapp/themes/themes.dart';
 
 class AddCustomRecipeForm extends StatefulWidget {
   const AddCustomRecipeForm({Key? key}) : super(key: key);
@@ -46,17 +47,25 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
     super.dispose();
   }
 
-  void _selectCategory(BuildContext context) {
+  void _selectFoodCategory(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final Color textColor = getTextColor(context);
+        final reverseColor =
+            textColor == Colors.black ? Colors.white : Colors.black;
+
         return AlertDialog(
-          title: const Text('Select Category'),
+          title: Text('Select Category', style: TextStyle(color: reverseColor)),
+          backgroundColor: textColor,
           content: SingleChildScrollView(
             child: Column(
               children: categories.map((category) {
                 return ListTile(
-                  title: Text(category),
+                  title: Text(
+                    category,
+                    style: TextStyle(color: reverseColor),
+                  ),
                   onTap: () {
                     setState(() {
                       selectedCategory = category;
@@ -97,14 +106,19 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
     });
   }
 
-  Future<void> showOptions(BuildContext context) async {
+  Future<void> showPictureChooseOptions(BuildContext context) async {
+    final Color textColor = getTextColor(context);
+    final reverseColor =
+        textColor == Colors.black ? Colors.white : Colors.black;
+
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
+        title: Text(
           'Select an option',
-          style: TextStyle(fontSize: 20, color: kDark),
+          style: TextStyle(fontSize: 20, color: reverseColor),
         ),
+        backgroundColor: textColor,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -113,15 +127,16 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 Get.back();
                 getImageFromGallery();
               },
-              child:
-                  const Text('Photo Gallery', style: TextStyle(fontSize: 14)),
+              child: Text('Photo Gallery',
+                  style: TextStyle(fontSize: 14, color: reverseColor)),
             ),
             TextButton(
               onPressed: () {
                 Get.back();
                 getImageFromCamera();
               },
-              child: const Text('Camera', style: TextStyle(fontSize: 14)),
+              child: Text('Camera',
+                  style: TextStyle(fontSize: 14, color: reverseColor)),
             ),
           ],
         ),
@@ -131,58 +146,74 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = getTextColor(context);
+    final reverseColor = theme.colorScheme.background == Colors.grey.shade400
+        ? Colors.black
+        : Colors.white;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'New Recipe',
           style: TextStyle(
-              color: kWhite, fontSize: 18, fontWeight: FontWeight.w500),
+              color: textColor, fontSize: 18, fontWeight: FontWeight.w500),
         ),
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: kWhite,
+            color: textColor,
           ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: kPrimary,
+        backgroundColor: theme.colorScheme.background,
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: kPrimary,
+          color: theme.colorScheme.background,
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Title',
-                style: TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
               ),
               TextFormField(
                 controller: _titleController,
-                style: const TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
                 keyboardType: TextInputType.text,
                 maxLength: 50,
+                cursorColor: reverseColor,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: reverseColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: reverseColor),
+                  ),
                   hintText: 'Enter title',
-                  hintStyle: TextStyle(color: kWhite.withOpacity(0.5)),
+                  hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 'Picture',
-                style: TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
               ),
               const SizedBox(height: 10),
               GestureDetector(
-                onTap: () => showOptions(context),
+                onTap: () => showPictureChooseOptions(context),
                 child: Container(
                   width: double.infinity,
                   height: 200,
                   color: Colors.grey.withOpacity(0.3),
                   child: _image == null
-                      ? const Center(child: Text('No Image selected'))
+                      ? Center(
+                          child: Text(
+                          'No Image selected',
+                          style: TextStyle(color: textColor),
+                        ))
                       : FittedBox(
                           fit: BoxFit.fill,
                           child: Image.file(
@@ -192,61 +223,72 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Category',
-                style: TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
               ),
               const SizedBox(height: 10),
               GestureDetector(
-                onTap: () => _selectCategory(context),
+                onTap: () => _selectFoodCategory(context),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: reverseColor),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     selectedCategory,
-                    style: const TextStyle(color: kWhite),
+                    style: TextStyle(color: textColor),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Cook Time (in minutes)',
-                style: TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _cookTimeController,
-                style: const TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
                 keyboardType: TextInputType.number,
                 maxLength: 5,
+                cursorColor: reverseColor,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: reverseColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: reverseColor),
+                  ),
                   hintText: 'Enter cook time',
-                  hintStyle: TextStyle(color: kWhite.withOpacity(0.5)),
+                  hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Description',
-                style: TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _descriptionController,
-                style: const TextStyle(color: kWhite),
+                style: TextStyle(color: textColor),
                 maxLines: 20,
                 minLines: 1,
                 maxLength: 20 * 50,
                 keyboardType: TextInputType.multiline,
-                cursorColor: kWhite,
+                cursorColor: reverseColor,
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: reverseColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: reverseColor),
+                  ),
                   hintText: 'Enter recipe description',
-                  hintStyle: TextStyle(color: kWhite.withOpacity(0.5)),
+                  hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -277,7 +319,7 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                       'Error',
                       'Please fill in the Title and select an Image.',
                       backgroundColor: Colors.red,
-                      colorText: Colors.white,
+                      colorText: textColor,
                     );
                     return;
                   }
@@ -295,11 +337,17 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                   Get.back(result: recipe);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: kWhite,
-                ),
-                child: const Text(
+                    backgroundColor:
+                        theme.colorScheme.background == Colors.grey.shade400
+                            ? kGray2
+                            : Colors.white),
+                child: Text(
                   'Post',
-                  style: TextStyle(color: kDark, fontSize: 12),
+                  style: TextStyle(
+                      color: textColor == Colors.black
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 12),
                 ),
               ),
             ],

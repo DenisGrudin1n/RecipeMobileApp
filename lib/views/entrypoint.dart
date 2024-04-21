@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/tab_index_controller.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:recipeapp/themes/themes.dart';
 import 'package:recipeapp/views/custom_recipes/add_custom_recipe_page.dart';
 import 'package:recipeapp/views/google_maps/google_maps_page.dart';
 import 'package:recipeapp/views/favorite_recipes/favorite_recipes_page.dart';
@@ -23,6 +24,8 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(TabIndexController());
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = getTextColor(context);
 
     return Obx(
       () => Scaffold(
@@ -32,14 +35,15 @@ class MainScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Theme(
-                data: Theme.of(context).copyWith(canvasColor: kPrimary),
+                data: Theme.of(context)
+                    .copyWith(canvasColor: theme.colorScheme.background),
                 child: BottomNavigationBar(
                   type: BottomNavigationBarType.fixed,
                   elevation: 0.0,
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
-                  unselectedIconTheme: const IconThemeData(color: Colors.white),
-                  selectedIconTheme: const IconThemeData(color: kDark),
+                  unselectedIconTheme: IconThemeData(color: textColor),
+                  selectedIconTheme: IconThemeData(color: textColor),
                   iconSize: 26.0,
                   onTap: (value) {
                     controller.setTabIndex = value;

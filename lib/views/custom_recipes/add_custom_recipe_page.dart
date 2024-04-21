@@ -6,6 +6,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/custom_recipe_controller.dart';
 import 'package:recipeapp/models/custom_recipe.dart';
+import 'package:recipeapp/themes/themes.dart';
 import 'package:recipeapp/views/custom_recipes/add_custom_recipe_form.dart';
 
 class AddCustomRecipePage extends StatelessWidget {
@@ -14,15 +15,17 @@ class AddCustomRecipePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customRecipeController = Get.find<CustomRecipeController>();
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = getTextColor(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Custom Recipes',
           style: TextStyle(
-              color: kWhite, fontSize: 18, fontWeight: FontWeight.w500),
+              color: textColor, fontSize: 18, fontWeight: FontWeight.w500),
         ),
-        backgroundColor: kPrimary,
+        backgroundColor: theme.colorScheme.background,
         actions: [
           TextButton(
             onPressed: () async {
@@ -46,17 +49,17 @@ class AddCustomRecipePage extends StatelessWidget {
           Container(
             height: height,
             width: width,
-            color: kPrimary,
+            color: theme.colorScheme.background,
           ),
           GetX<CustomRecipeController>(
             builder: (controller) {
               List<CustomRecipe> recipes = controller.customRecipes;
               if (recipes.isEmpty) {
-                return const Center(
+                return Center(
                   child: Text(
                     'No custom recipes added yet',
                     style: TextStyle(
-                        color: kWhite,
+                        color: textColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
                   ),

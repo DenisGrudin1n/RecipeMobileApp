@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/user_controller.dart';
+import 'package:recipeapp/themes/themes.dart';
 import 'package:recipeapp/views/profile/profile_page.dart';
 
 class AppBarHome extends StatefulWidget {
@@ -31,10 +32,13 @@ class _AppBarHomeState extends State<AppBarHome> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = getTextColor(context);
+
     return Container(
       padding: const EdgeInsets.only(right: 15.0, left: 15.0),
       width: width,
-      color: kPrimary,
+      color: theme.colorScheme.background,
       height: 135.0.h,
       child: Obx(
         () {
@@ -49,20 +53,20 @@ class _AppBarHomeState extends State<AppBarHome> {
                   children: [
                     Text(
                       'Hi, $username',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.w500,
-                        color: kWhite,
+                        color: textColor,
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 4.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
                       child: Text(
                         'Ready to cook for lunch?',
                         style: TextStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.w500,
-                          color: kGray,
+                          color: textColor,
                         ),
                       ),
                     ),

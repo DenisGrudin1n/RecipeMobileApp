@@ -17,3 +17,8 @@ ThemeData darkMode = ThemeData(
     secondary: Colors.grey.shade700,
   ),
 );
+
+Color getTextColor(BuildContext context) {
+  final ThemeData theme = Theme.of(context);
+  return theme.brightness == Brightness.light ? Colors.black : Colors.white;
+}

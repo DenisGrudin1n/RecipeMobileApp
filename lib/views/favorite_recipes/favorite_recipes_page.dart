@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/recipe_controller.dart';
 import 'package:recipeapp/models/recipe.dart';
+import 'package:recipeapp/themes/themes.dart';
 
 class FavoriteRecipesPage extends StatelessWidget {
   const FavoriteRecipesPage({Key? key}) : super(key: key);
@@ -11,38 +12,43 @@ class FavoriteRecipesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favoriteRecipeController = Get.find<RecipeController>();
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = getTextColor(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Favorite Recipes',
-          style: TextStyle(color: kWhite),
+          style: TextStyle(color: textColor),
         ),
-        backgroundColor: kPrimary,
+        backgroundColor: theme.colorScheme.background,
       ),
       body: Stack(
         children: [
           Container(
             height: height,
             width: width,
-            color: kPrimary,
+            color: theme.colorScheme.background,
           ),
-          _buildFavoriteRecipesList(favoriteRecipeController),
+          _buildFavoriteRecipesList(favoriteRecipeController, context),
         ],
       ),
     );
   }
 
-  Widget _buildFavoriteRecipesList(RecipeController favoriteController) {
+  Widget _buildFavoriteRecipesList(
+      RecipeController favoriteController, BuildContext context) {
+    final Color textColor = getTextColor(context);
+
     return GetX<RecipeController>(
       builder: (favoriteController) {
         List<Recipe> recipes = favoriteController.favoriteRecipes;
         if (recipes.isEmpty) {
-          return const Center(
+          return Center(
             child: Text(
               'No Favorite Recipes Added Yet',
               style: TextStyle(
-                  color: kWhite, fontSize: 16, fontWeight: FontWeight.w500),
+                  color: textColor, fontSize: 16, fontWeight: FontWeight.w500),
             ),
           );
         } else {

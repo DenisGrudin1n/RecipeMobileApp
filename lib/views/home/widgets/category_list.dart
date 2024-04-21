@@ -6,6 +6,7 @@ import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/constants/uidata.dart';
 import 'package:recipeapp/controllers/recipe_controller.dart';
 import 'package:recipeapp/models/recipe.dart';
+import 'package:recipeapp/themes/themes.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({Key? key}) : super(key: key);
@@ -213,6 +214,8 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = getTextColor(context);
+
     return Column(
       children: [
         Padding(
@@ -222,26 +225,26 @@ class _CategoryListState extends State<CategoryList> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   AntDesign.leftcircleo,
-                  color: kWhite,
+                  color: textColor,
                 ),
                 onPressed: () => _changeCategory(false),
               ),
               Center(
                 child: Text(
                   dishCategories[startCategoryIndex],
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500,
-                    color: kWhite,
+                    color: textColor,
                   ),
                 ),
               ),
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   AntDesign.rightcircleo,
-                  color: kWhite,
+                  color: textColor,
                 ),
                 onPressed: () => _changeCategory(true),
               ),

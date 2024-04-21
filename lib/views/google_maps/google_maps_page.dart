@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:recipeapp/constants/constants.dart';
 import 'package:recipeapp/controllers/google_maps_controller.dart';
+import 'package:recipeapp/themes/themes.dart';
 
 class GoogleMapsPage extends StatefulWidget {
   const GoogleMapsPage({Key? key}) : super(key: key);
@@ -47,19 +48,22 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = getTextColor(context);
+
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
+          title: Text(
             'Google Maps',
-            style: TextStyle(color: kWhite),
+            style: TextStyle(color: textColor),
           ),
-          backgroundColor: kPrimary),
+          backgroundColor: theme.colorScheme.background),
       body: Stack(
         children: [
           Container(
             height: height,
             width: width,
-            color: kPrimary,
+            color: theme.colorScheme.background,
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
