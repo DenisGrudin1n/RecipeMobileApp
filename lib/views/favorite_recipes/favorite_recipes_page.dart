@@ -123,12 +123,12 @@ class FavoriteRecipesPage extends StatelessWidget {
                     ? const Icon(
                         Icons.favorite,
                         size: 24.0,
-                        color: Colors.red,
+                        color: kRed,
                       )
                     : const Icon(
                         Icons.favorite_outline,
                         size: 24.0,
-                        color: Colors.red,
+                        color: kRed,
                       ),
               ),
             ),
@@ -156,7 +156,7 @@ class FavoriteRecipesPage extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 12.0,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                              color: kWhite,
                             ),
                           ),
                         ),
@@ -169,7 +169,7 @@ class FavoriteRecipesPage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: kWhite,
                       ),
                     ),
                   ),
@@ -181,7 +181,7 @@ class FavoriteRecipesPage extends StatelessWidget {
               stars,
               (starIndex) => const Icon(
                 Icons.star,
-                color: Colors.amber,
+                color: kAmber,
                 size: 20.0,
               ),
             ),

@@ -67,9 +67,8 @@ class MainScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 15.0),
                           child: Icon(
                             AntDesign.pluscircle,
-                            color: controller.tabIndex == 2
-                                ? kDark
-                                : Colors.amberAccent,
+                            color:
+                                controller.tabIndex == 2 ? kDark : kAmberAccent,
                             size: 34.0,
                           ),
                         ),

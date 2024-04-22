@@ -52,8 +52,7 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
       context: context,
       builder: (BuildContext context) {
         final Color textColor = getTextColor(context);
-        final reverseColor =
-            textColor == Colors.black ? Colors.white : Colors.black;
+        final reverseColor = textColor == kDark ? kWhite : kDark;
 
         return AlertDialog(
           title: Text('Select Category', style: TextStyle(color: reverseColor)),
@@ -108,8 +107,7 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
 
   Future<void> showPictureChooseOptions(BuildContext context) async {
     final Color textColor = getTextColor(context);
-    final reverseColor =
-        textColor == Colors.black ? Colors.white : Colors.black;
+    final reverseColor = textColor == kDark ? kWhite : kDark;
 
     await showDialog(
       context: context,
@@ -148,9 +146,6 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Color textColor = getTextColor(context);
-    final reverseColor = theme.colorScheme.background == Colors.grey.shade400
-        ? Colors.black
-        : Colors.white;
 
     return Scaffold(
       appBar: AppBar(
@@ -184,13 +179,13 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 style: TextStyle(color: textColor),
                 keyboardType: TextInputType.text,
                 maxLength: 50,
-                cursorColor: reverseColor,
+                cursorColor: textColor,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: reverseColor),
+                    borderSide: BorderSide(color: textColor),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: reverseColor),
+                    borderSide: BorderSide(color: textColor),
                   ),
                   hintText: 'Enter title',
                   hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
@@ -234,7 +229,7 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    border: Border.all(color: reverseColor),
+                    border: Border.all(color: textColor),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
@@ -254,13 +249,13 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 style: TextStyle(color: textColor),
                 keyboardType: TextInputType.number,
                 maxLength: 5,
-                cursorColor: reverseColor,
+                cursorColor: textColor,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: reverseColor),
+                    borderSide: BorderSide(color: textColor),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: reverseColor),
+                    borderSide: BorderSide(color: textColor),
                   ),
                   hintText: 'Enter cook time',
                   hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
@@ -279,13 +274,13 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 minLines: 1,
                 maxLength: 20 * 50,
                 keyboardType: TextInputType.multiline,
-                cursorColor: reverseColor,
+                cursorColor: textColor,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: reverseColor),
+                    borderSide: BorderSide(color: textColor),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: reverseColor),
+                    borderSide: BorderSide(color: textColor),
                   ),
                   hintText: 'Enter recipe description',
                   hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
@@ -338,16 +333,13 @@ class _AddCustomRecipeFormState extends State<AddCustomRecipeForm> {
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        theme.colorScheme.background == Colors.grey.shade400
-                            ? kGray2
-                            : Colors.white),
+                        theme.colorScheme.background == Colors.grey.shade100
+                            ? kPrimary
+                            : kWhite),
                 child: Text(
                   'Post',
                   style: TextStyle(
-                      color: textColor == Colors.black
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 12),
+                      color: textColor == kDark ? kWhite : kDark, fontSize: 12),
                 ),
               ),
             ],

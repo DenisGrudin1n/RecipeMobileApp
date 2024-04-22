@@ -18,11 +18,11 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Settings',
-          style: TextStyle(color: kWhite),
+          style: TextStyle(color: textColor),
         ),
-        backgroundColor: kPrimary,
+        backgroundColor: theme.colorScheme.background,
       ),
       body: Stack(
         children: [

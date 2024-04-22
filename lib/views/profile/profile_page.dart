@@ -30,9 +30,6 @@ class ProfilePage extends StatelessWidget {
             height: height,
             width: width,
             color: kPrimary,
-            //decoration: BoxDecoration(
-            //gradient: myGradient, // Використовуйте градієнт з constants.dart
-            //),
           ),
           const Center(
               child: Text(

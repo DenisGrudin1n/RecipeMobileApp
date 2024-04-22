@@ -65,7 +65,7 @@ class DailyMealBlock extends StatelessWidget {
           width: 24.0.w,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(7.0.r),
-            color: Colors.amber,
+            color: kAmber,
           ),
           child: Icon(
             icon,

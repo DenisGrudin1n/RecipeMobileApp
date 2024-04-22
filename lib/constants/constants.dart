@@ -18,6 +18,7 @@ const kDark = Color.fromARGB(255, 0, 0, 0);
 const kRed = Color(0xffe81e4d);
 const kOffWhite = Color(0xffF3F4F8);
 const kYellow = Color.fromARGB(255, 255, 220, 113);
+const kAmber = Colors.amber;
 
 double height = 825.h;
 double width = 375.w;
