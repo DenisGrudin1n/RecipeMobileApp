@@ -4,14 +4,14 @@ RecipeApp is a mobile application developed using Flutter that provides users wi
 
 ## Screenshots
 
-### ㅤㅤㅤHome Page: ㅤㅤㅤㅤㅤ  ㅤ Favorite Recipes Page: ㅤㅤㅤㅤCustom Recipes Page:
+### ㅤㅤㅤHome Page: ㅤㅤㅤㅤㅤ  ㅤ Favorite Recipes Page: ㅤㅤㅤㅤCustom Recipes Form:
 <div>
   <img src="https://github.com/DenisGrudin1n/RecipeMobileApp/assets/157652311/bfb744d1-4f14-45b0-9b60-33ee69aece0d" width="235" />ㅤㅤㅤ
   <img src="https://github.com/DenisGrudin1n/RecipeMobileApp/assets/157652311/370e8b26-a745-4bf0-90bd-8283c0498d4d" width="235" />ㅤㅤㅤ
   <img src="https://github.com/DenisGrudin1n/RecipeMobileApp/assets/157652311/871cfd89-11ec-4a8b-9357-3927b573ee6b" width="235" />ㅤㅤㅤ
 </div>
 
-### ㅤCustom Recipes Form: ㅤㅤㅤㅤ   Google Maps Page: ㅤㅤㅤㅤ ㅤㅤSettings Page:
+### ㅤCustom Recipes Page: ㅤㅤㅤㅤ   Google Maps Page: ㅤㅤㅤㅤ ㅤㅤSettings Page:
 <div>
   <img src="https://github.com/DenisGrudin1n/RecipeMobileApp/assets/157652311/f9a114e7-9c7f-4e02-9503-0ce0fa12510b" width="235" /> ㅤㅤㅤ
   <img src="https://github.com/DenisGrudin1n/RecipeMobileApp/assets/157652311/1f68c153-73ff-4a90-a28a-c472bd9661f9" width="235" />ㅤㅤㅤ
