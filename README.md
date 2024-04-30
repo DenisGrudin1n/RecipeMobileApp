@@ -69,7 +69,7 @@ The project follows a MVC+S structure, organized into various directories:
 The constants directory holds various constants used throughout the application, such as app themes, colors, fonts, API endpoints, and other configuration-related values:
 
 - **constants.dart:** This file contains various constants used throughout the application, including white, light blue, and light purple for light mode, and black, dark blue, and dark purple for dark mode. It also defines constants for medium and bold font weights.
-- **uidata.dart:** This file contains additional UI-related constants such as font sizes, padding values, and icon sizes.
+- **uidata.dart:** This file defines constants related to the user interface and additional data required to display recipes in the application.
 
 ### controllers
 
