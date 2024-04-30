@@ -73,6 +73,7 @@ class _LoginFormState extends State<LoginForm> {
             onPressed: () => loginUser(),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
+              backgroundColor: kWhite,
             ),
             child: _isLoading
                 ? const Center(

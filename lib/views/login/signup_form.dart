@@ -98,6 +98,7 @@ class _SignUpFormState extends State<SignUpForm> {
             onPressed: () => signUpUser(),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
+              backgroundColor: kWhite,
             ),
             child: _isLoading
                 ? const Center(
